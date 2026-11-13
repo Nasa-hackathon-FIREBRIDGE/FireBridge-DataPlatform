@@ -1,0 +1,16 @@
+{
+  "repository": "Nasa-hackathon-FIREBRIDGE/FireBridge-DataPlatform",
+  "previous_repository": "Nasa-hackathon-FIREBRIDGE/FireBridge-data-pipeline",
+  "deployment_branch": "main",
+  "environment": "production",
+  "deployment_account": "firebridge-deploy",
+  "gateway": "cd_gateway.py",
+  "runtime_root": "/opt/firebridge",
+  "required_code": [
+    "pyproject.toml",
+    "requirements-data.lock",
+    "src/firebridge/__init__.py",
+    "compose.yaml",
+    "scripts/stack.sh"
+  ]
+}
