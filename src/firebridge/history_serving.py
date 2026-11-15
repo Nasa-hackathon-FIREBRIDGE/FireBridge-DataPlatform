@@ -165,6 +165,16 @@ def audit(settings,*,root=None,refresh=False):
           'observation_coverage':'unknown','provider_calls':0,'results':results}
         report['provider_gaps']=plan.get('provider_gaps',[])
         report['through_date_inclusive']=plan.get('through_date_inclusive')
+        daily_paths=[str(root/'daily'/(r['id']+'.parquet')) for r in results if r['status']=='verified']
+        report['platform_inventory']=[]
+        if daily_paths:
+            platform_rows=db.execute('''SELECT satellite,processing_stream,min(date_utc)::VARCHAR first_observed_date,
+              max(date_utc)::VARCHAR last_observed_date,sum(source_rows)::BIGINT source_rows,
+              sum(invalid_frp_rows)::BIGINT invalid_frp_rows FROM read_parquet(?) GROUP BY satellite,processing_stream
+              ORDER BY satellite,processing_stream''',[daily_paths]).fetchall()
+            report['platform_inventory']=[dict(zip(('satellite','processing_stream','first_observed_date','last_observed_date','source_rows','invalid_frp_rows'),row)) for row in platform_rows]
+        report['oversized_windows_for_default_load']=[r['id'] for r in results if r.get('rows',0)>2_000_000]
+        report['empty_modis_windows_requiring_collection_review']=[r['id'] for r in results if r['feed'].startswith('MODIS') and r.get('rows')==0]
         atomic_json(out/'audit.json',report)
         atomic_json(out/'audit-progress.json',{k:report[k] for k in ('state','checked_at','windows','failed_windows','source_rows','elapsed_seconds')})
         return report
@@ -274,7 +284,7 @@ def load_window(settings,root,r,scope,bbox,*,reserve_bytes=16*GIB,max_database_b
                             partition_ids.append(str(stream_detection_partition(db,settings,rid,aid,source,day,scope,bbox,rows,count,fetched_at=utc(receipt['completed_at']),provider_footprint=footprint)))
             finally:spool.close()
         with connect(settings) as db:
-            releases=publish(db,settings,partition_ids,scope,reason='history_import',observed_at=utc(receipt['completed_at']))
+            releases=publish(db,settings,partition_ids,scope,reason='new_data',observed_at=utc(receipt['completed_at']))
             result={**spec,**counts,'partition_ids':partition_ids,'releases':releases,'elapsed_seconds':round(time.monotonic()-started,3),'reused':False}
             manifest=store.json(result)
             db.execute("UPDATE pipeline_runs SET status='succeeded',finished_at=now(),output_manifest_uri=%s WHERE id=%s",(manifest.uri,rid))
@@ -309,9 +319,14 @@ def load(settings,*,root=None,scope='global',bbox=None,request_ids=None,max_wind
         for r in records:
             if not request_ids and digest(window_spec(r,scope,bbox)[0]) in completed:
                 skipped+=1;continue
-            if r['status']!='complete':raise ValueError('Incomplete acquisition window')
-            if r['rows']>max_rows_per_window:raise ValueError('Window exceeds row budget; choose an explicit smaller benchmark or raise measured limit')
-            result=load_window(settings,root,r,scope,bbox,reserve_bytes=reserve_bytes,max_database_bytes=max_database_bytes)
+            atomic_json(out/('load-'+scope+'.json'),{'state':'loading','updated_at':now(),'current_request':r['id'],'results':results})
+            try:
+                if r['status']!='complete':raise ValueError('Incomplete acquisition window')
+                if r['rows']>max_rows_per_window:raise ValueError('Window exceeds row budget; choose an explicit smaller benchmark or raise measured limit')
+                result=load_window(settings,root,r,scope,bbox,reserve_bytes=reserve_bytes,max_database_bytes=max_database_bytes)
+            except Exception as exc:
+                atomic_json(out/('load-'+scope+'.json'),{'state':'failed','updated_at':now(),'current_request':r['id'],'error_type':type(exc).__name__,'results':results})
+                raise
             results.append(result)
             atomic_json(out/('load-'+scope+'.json'),{'state':'loading','updated_at':now(),'results':results})
             if len([r for r in results if not r['reused']])>=max_windows:break
