@@ -28,6 +28,8 @@ from .util import canonical, digest, now, uid, utc
 
 ENGINE = 'archive-selection-v1'
 STAGE = 'archive-selection'
+# Keep aligned with the webapp's HISTORICAL_MAX_WINDOW_DAYS contract.
+MAX_HISTORICAL_WINDOW_DAYS = 10_980
 _verified_files = {}
 _catalog_cache = {}
 AREA_SQL = """CASE WHEN ST_XMax(a.geom)-ST_XMin(a.geom)>=359.999
@@ -145,7 +147,8 @@ def submit(settings, analysis_id):
           'geometry_sha256':row['geometry_sha256'],'start':row['start_date'],'end_exclusive':row['end_date_exclusive'],
           'data_mode':row['request_spec'].get('data_mode')}
         if spec['data_mode']!='standard_only':raise ValueError('Unsupported archive processing selection')
-        if not 0<(utc(spec['end_exclusive'])-utc(spec['start'])).days<=3660:raise ValueError('Select at most 3660 days per historical analysis')
+        if not 0<(utc(spec['end_exclusive'])-utc(spec['start'])).days<=MAX_HISTORICAL_WINDOW_DAYS:
+            raise ValueError(f'Select at most {MAX_HISTORICAL_WINDOW_DAYS} days per historical analysis')
         key=digest([ENGINE,spec]);rid=uid([STAGE,key])
         db.execute("""INSERT INTO pipeline_runs(id,stage,idempotency_key,status,code_version,config,input_manifest_uri)
           VALUES (%s,%s,%s,'queued',%s,%s,%s) ON CONFLICT(idempotency_key) DO NOTHING""",(rid,STAGE,key,ENGINE,Jsonb(spec),'archive-catalog:'+spec['catalog_id']))

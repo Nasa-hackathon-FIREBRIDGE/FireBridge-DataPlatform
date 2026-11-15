@@ -110,3 +110,40 @@ def test_changed_input_fails_closed_before_publication(database,tmp_path,indexed
     target.write_bytes(b'changed')
     with pytest.raises(ValueError,match='checksum'):prepare(settings,job['job_id'],reserve_bytes=0)
     assert status(settings,job['job_id'])['status']=='failed'
+
+
+@pytest.mark.integration
+@pytest.mark.parametrize('start',['2014-01-01','2000-01-01'])
+def test_long_historical_selection_prepares_only_verified_archive_dates(database,tmp_path,start):
+    settings=replace(database,data_dir=tmp_path)
+    analysis,_,_=request(settings,start=start,end='2026-11-11')
+    job=submit(settings,analysis)
+    assert job['status']=='queued'
+    result=prepare(settings,job['job_id'],reserve_bytes=0)
+    assert result['status']=='succeeded'
+    assert result['result']['selected_rows']==2
+    assert result['result']['start']==start
+    assert result['result']['end_exclusive']=='2026-11-11'
+    assert result['result']['provider_calls']==0
+    assert submit(settings,analysis)==result
+    with connect(settings) as db:
+        parts=db.execute('SELECT p.support_spec FROM release_partitions rp JOIN data_partitions p ON rp.partition_id=p.id WHERE rp.release_id=%s',(result['result']['release_id'],)).fetchall()
+    assert len(parts)==1
+    assert parts[0]['support_spec']['start'].startswith('2024-01-01')
+    assert parts[0]['support_spec']['end_exclusive'].startswith('2024-01-03')
+
+
+@pytest.mark.integration
+@pytest.mark.parametrize('extra_day',[0,1])
+def test_historical_window_boundary(database,tmp_path,extra_day):
+    from datetime import date,timedelta
+    from firebridge.history_query import MAX_HISTORICAL_WINDOW_DAYS
+    settings=replace(database,data_dir=tmp_path)
+    end='2024-01-03'
+    start=str(date.fromisoformat(end)-timedelta(days=MAX_HISTORICAL_WINDOW_DAYS+extra_day))
+    analysis,_,_=request(settings,start=start,end=end)
+    if extra_day:
+        with pytest.raises(ValueError,match='Select at most 10980 days'):
+            submit(settings,analysis)
+    else:
+        assert submit(settings,analysis)['status']=='queued'

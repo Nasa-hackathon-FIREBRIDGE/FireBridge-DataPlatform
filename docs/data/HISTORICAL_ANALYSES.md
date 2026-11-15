@@ -142,3 +142,18 @@ being prepared. The public API never receives source filesystem paths or secrets
 For an example full year, use `2020-01-01` through the exclusive end `2021-01-01`.
 The audited 2020 archive has Terra, Aqua, S-NPP and NOAA-20. NOAA-21 and the
 downloaded Landsat feeds have no 2020 records. Do not imply their presence.
+
+
+### Historical interval limit
+
+The history service and webapp accept at most **10,980 days** per historical
+analysis (about 30 years). This includes a 2000-to-present MODIS selection.
+The webapp's daily calendar supports the same number of days. Selected dates
+remain unchanged; dates outside verified archive inputs remain unknown. Existing
+row, disk and execution budgets still apply to large areas or dense selections.
+
+When deploying this increase, rebuild the history service and publish a new
+catalogue before activating the updated webapp: `history_query.py` contributes
+to the catalogue's preparation-code fingerprint. Run the current archive audit
+and `firebridge publish-history-catalog --scope global` using the deployment
+commands above. A webapp-only deployment still meets the old service limit.
