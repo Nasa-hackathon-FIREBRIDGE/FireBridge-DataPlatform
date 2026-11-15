@@ -1,0 +1,158 @@
+{
+  "history_type": "reconstructed_import",
+  "replay_date": "2026-11-15",
+  "timezone": "Africa/Casablanca",
+  "repository": "Nasa-hackathon-FIREBRIDGE/FireBridge-DataPlatform",
+  "source_repository": "Nasa-hackathon-FIREBRIDGE/FireBridge-data-pipeline",
+  "source_head": "50ce7d4b550513255ca4d52738ff55189e810ee2",
+  "source_tree": "d3356323344faf52148975e84a4ae68d6841ec49",
+  "ci_baseline": "b4f38e07886885bef334d1f4285338b0add586aa",
+  "branch": "codex/replay-2026-11-15",
+  "original_source_commit_count": 25,
+  "compacted_source_commit_count": 20,
+  "commits": [
+    {
+      "source_compact_commit": "533d72d241cee236ae450166fb9a64064f5083e1",
+      "date": "2026-11-15T08:00:00+00:00",
+      "subject": "chore: initialize the FireBridge data platform repository",
+      "status": "replayed",
+      "new_commit": "dddb9527217abc83ee98c9c3849bd86acf5dcc38"
+    },
+    {
+      "source_compact_commit": "8ff5f47bc16bb1b674484ddfb373e4c748c0d245",
+      "date": "2026-11-15T08:10:00+00:00",
+      "subject": "feat: implement the data platform with tested production releases",
+      "status": "replayed",
+      "new_commit": "f0df50db24b4f2fbd4c5b40f6bc6b864d132f400"
+    },
+    {
+      "source_compact_commit": "01edfa0eed018dada344a6d8ab09a46eadfe6e2c",
+      "date": "2026-11-15T08:20:00+00:00",
+      "subject": "fix: preserve deployed images and bound isolated validation resources",
+      "status": "replayed",
+      "new_commit": "204b02632df834b6c9161eeff5aca15667e2b7d0"
+    },
+    {
+      "source_compact_commit": "df33c99de190552baee0d30b3426ca317d595837",
+      "date": "2026-11-15T08:30:00+00:00",
+      "subject": "deploy: document operations and retain paused workflow tasks",
+      "status": "replayed",
+      "new_commit": "9075170202c5ee53810f067df9fb5b77e01f0fb1"
+    },
+    {
+      "source_compact_commit": "01a96469645b792b70997fa8010225f5b8f90730",
+      "date": "2026-11-15T08:40:00+00:00",
+      "subject": "ci: configure encrypted GitHub production deployment credentials",
+      "status": "replayed",
+      "new_commit": "ecaca68b6ca152aba87ab06068721d061ea95ada"
+    },
+    {
+      "source_compact_commit": "4ecca7c02416b7ed28f3cedef526734cf951a60b",
+      "date": "2026-11-15T08:50:00+00:00",
+      "subject": "fix: handle FIRMS quotas as resumable download waits",
+      "status": "replayed",
+      "new_commit": "c539cd973d3fbe9e1f076dc07bc3652043b0d669"
+    },
+    {
+      "source_compact_commit": "c36d13b80e0b95dc808704ba5a750c78ec2685c7",
+      "date": "2026-11-15T09:00:00+00:00",
+      "subject": "fix: accept empty FIRMS CSV responses without trailing newlines",
+      "status": "replayed",
+      "new_commit": "180bbe1f270578c6e6b5d298c4769538a367d476"
+    },
+    {
+      "source_compact_commit": "0913e6d476672d249ed8ea949c4407d7fa5c85a2",
+      "date": "2026-11-15T09:10:00+00:00",
+      "subject": "feat: audit historical archives and retain valid empty windows",
+      "status": "replayed",
+      "new_commit": "7aa7fdb25c1fb4d2e7e9fe9b78e0d3e703827884"
+    },
+    {
+      "source_compact_commit": "fc9daac348ec07e6dc81937c378988a983ef2f91",
+      "date": "2026-11-15T09:20:00+00:00",
+      "subject": "fix: report coverage failures using the publication reason contract",
+      "status": "replayed",
+      "new_commit": "4ae1c0c27a2d7bec8110fe06105a346e0e75ecf0"
+    },
+    {
+      "source_compact_commit": "9c702388845669aa3f1ecb56f8215b57fc1998d7",
+      "date": "2026-11-15T09:30:00+00:00",
+      "subject": "fix: accept successful Airflow authentication responses",
+      "status": "replayed",
+      "new_commit": "07cc64af53accddfab4ceb7fe2e748ab982626d7"
+    },
+    {
+      "source_compact_commit": "f4908b495363285f1ef42836b46881354fafdd90",
+      "date": "2026-11-15T09:40:00+00:00",
+      "subject": "feat: serve historical areas through a bounded native-result cache",
+      "status": "replayed",
+      "new_commit": "dbbaed7e95564b5d678daa90afecdcc31aeb5471"
+    },
+    {
+      "source_compact_commit": "21569ad1e8a088ddf84902a736bb76129dfca7cd",
+      "date": "2026-11-15T09:50:00+00:00",
+      "subject": "fix: release historical worker locks before closing connections",
+      "status": "replayed",
+      "new_commit": "70257c81a1f077ba4cb09007e5897a5d9aa97e88"
+    },
+    {
+      "source_compact_commit": "e02ead635bc8c04e2b8bdb2f8f1f4a07065cd444",
+      "date": "2026-11-15T10:00:00+00:00",
+      "subject": "test: verify corrupted catalogue checksum inputs",
+      "status": "replayed",
+      "new_commit": "9c9dab47a11c4ba1fddf49200ccd51c651eda10a"
+    },
+    {
+      "source_compact_commit": "f91f047154341c4bfef39d9cba36cf35cf6e42c9",
+      "date": "2026-11-15T10:10:00+00:00",
+      "subject": "perf: index historical archives into immutable regional Parquet shards",
+      "status": "replayed",
+      "new_commit": "c8eadeac334345d0e7a7889d5be467a463189c9e"
+    },
+    {
+      "source_compact_commit": "3304a9618018635582713fad13f0753f18440c83",
+      "date": "2026-11-15T10:20:00+00:00",
+      "subject": "perf: reuse verified checksums and bound immutable manifest caches",
+      "status": "replayed",
+      "new_commit": "05257048d4db620f4ac682501b048802958a8145"
+    },
+    {
+      "source_compact_commit": "aca5e93af4b0065849f1e096b6462cae00aa7aba",
+      "date": "2026-11-15T10:30:00+00:00",
+      "subject": "perf: stream regional index reads with bounded Arrow batches",
+      "status": "replayed",
+      "new_commit": "25607c413bbe3c1c27ca4ca3fe54b18553343515"
+    },
+    {
+      "source_compact_commit": "80e5ea227acebc58a01df1cc2a2f7fe00ec93b37",
+      "date": "2026-11-15T10:40:00+00:00",
+      "subject": "test: cover empty regions and corruption of pinned shards",
+      "status": "replayed",
+      "new_commit": "cc9a3648222f4a6012d0880b8dae44c278f1c554"
+    },
+    {
+      "source_compact_commit": "a831d3f535401bdd4d316e51878dc76077a75fb7",
+      "date": "2026-11-15T10:50:00+00:00",
+      "subject": "perf: coalesce sparse index records before bounded database checks",
+      "status": "replayed",
+      "new_commit": "756691c636a3f65c314d6b09d35b9aefe9739b78"
+    },
+    {
+      "source_compact_commit": "ac77815dd53704da954e6eb532e388bed1393e41",
+      "date": "2026-11-15T11:00:00+00:00",
+      "subject": "perf: warm archive catalogue metadata while the worker is idle",
+      "status": "replayed",
+      "new_commit": "f0af2f5b53bad09748fd548c854021da908adbdd"
+    },
+    {
+      "source_compact_commit": "25e87166185a86e1ef856ef96179fb68b416afa3",
+      "date": "2026-11-15T11:10:00+00:00",
+      "subject": "feat: support thirty-year historical selections with tested window limits",
+      "status": "replayed",
+      "new_commit": "4acc955e4e796f93627676e0afa5684b9f654fa6"
+    }
+  ],
+  "application_code_matches_source": true,
+  "new_ci_configuration_preserved": true,
+  "note": "Commit timestamps describe an explicitly reconstructed history. GitHub push, PR and CI timestamps are recorded independently."
+}

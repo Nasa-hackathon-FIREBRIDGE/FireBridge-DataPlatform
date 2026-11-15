@@ -73,3 +73,16 @@ To use another raw folder, pass `--input '/path/to/folder'` to the profile scrip
 `python3 analysis/acquire_context.py` discovers a bounded one-week window, fetches public documentation and the EFFIS workbook, and records failures. `firebridge_env/bin/python analysis/download_science.py` selects and downloads a small set of NASA science files when a locally configured `EARTHDATA_TOKEN` is available in `.env` or the process environment. Credentials never enter reports and `.env` is ignored by Git.
 
 These are research and EDA artifacts. No harmonization model or deployed hackathon application is included. Point detections alone do not establish valid negative observations or observation coverage.
+
+## Repository import and deployment
+
+This repository imports the existing FireBridge source as a compacted, reconstructed
+history dated **15 November 2026**, in the Africa/Casablanca time zone.
+Commit dates describe the replay; actual publication and CI times remain separate.
+The original authors and source snapshots are preserved; `.ci/history-import.json`
+maps replay commits to their source commits.
+
+The new repository's CI/CD and Docker configuration are retained. Pull requests
+validate the complete application. Merging into `main` starts automatic
+production deployment after all required workflow jobs pass. Merge without
+squashing to preserve the grouped source history.
